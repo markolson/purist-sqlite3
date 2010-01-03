@@ -3,7 +3,7 @@ module Sqlite3Table
     attr_accessor :header
     def initialize(f)
       record = Sqlite3Record.new(f)
-      payload = StringIO.new(record.payload)
+      payload = record.payload
       @header = {
         :type => Sqlite3Record::read_cell(record.cells[0], payload),
         :name => Sqlite3Record::read_cell(record.cells[1], payload),

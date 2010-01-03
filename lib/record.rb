@@ -48,6 +48,6 @@ class Sqlite3Record
     while not payload_io.eof?
       @cells << varint(payload_io)
     end
-    @payload = f.read(payload_length - header_length)
+    @payload = StringIO.new(f.read(payload_length - header_length))
   end
 end
