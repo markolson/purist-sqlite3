@@ -5,7 +5,7 @@ class Sqlite3BTree
   def initialize(f)
     @file = f
     self.header = parse_header
-    @types = {2 => 'Interior Index', 5 => 'Interior table', 10 => 'Leaf Index', 13 => 'Leaf Table'}
+    @types = {2 => 'Interior Index', 5 => 'Interior Table', 10 => 'Leaf Index', 13 => 'Leaf Table'}
     self.cells = parse_cells(self.header[:cells])
   end
   

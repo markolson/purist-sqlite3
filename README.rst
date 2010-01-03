@@ -1,6 +1,7 @@
 I'm interested to see if I can:
 
 * Make a 100% ruby library to read Sqlite3 databases
+* Generate classes to read the tables based on the headers
 * Query the database
 * Query it quickly
 * Handle the C, U and D in CRUD

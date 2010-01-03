@@ -2,7 +2,7 @@ def read_sqlite3_header(f)
   check = f.read(16)
   raise "Invalid Magic String" unless (check == "SQLite format 3\000")
   header = {
-   :db_size => f.read(2).unpack('n')[0],
+   :page_size => f.read(2).unpack('n')[0],
    :write_version => f.read(1).unpack('C')[0], #assert == 1
    :read_version => f.read(1).unpack('C')[0],  #assert == 1 
    :reserved => f.read(1).unpack('C')[0],
