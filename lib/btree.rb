@@ -1,11 +1,10 @@
 class Sqlite3BTree
-  attr_accessor :header
-  attr_accessor :cells
+  attr_accessor :header, :cells, :file
+  @@types = {2 => 'Interior Index', 5 => 'Interior Table', 10 => 'Leaf Index', 13 => 'Leaf Table'}
   
   def initialize(f)
     @file = f
     self.header = parse_header
-    @types = {2 => 'Interior Index', 5 => 'Interior Table', 10 => 'Leaf Index', 13 => 'Leaf Table'}
     self.cells = parse_cells(self.header[:cells])
   end
   
@@ -19,7 +18,7 @@ class Sqlite3BTree
       :fragmented_free_bytes => f.read(1).unpack('C')[0]
     }
     header[:rightmost_pointer] = f.read(4).unpack('L')[0] if header[:type] < 10
-    
+    header[:type_string] = @@types[header[:type]]
     return header
   end
   
@@ -31,12 +30,6 @@ class Sqlite3BTree
       cells << f.read(2).unpack('n')[0]
     end
     return cells
-  end
-  
-  
-  
-  def inspect
-    print "#<Sqlite3BTree:#{@types[header[:type]]}>"
   end
 end
 
