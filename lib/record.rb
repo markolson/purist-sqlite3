@@ -22,6 +22,9 @@ class Sqlite3Record
       when 0 then nil
       when 1 then payload.read(1).unpack('c')[0]
       when 2 then payload.read(2).unpack('n')[0]
+      when 4 then payload.read(4).unpack('N')[0]
+      when 7 then payload.read(8).unpack('G')[0]
+      #else print "unknown #{x}"
     end
     if (x > 11 && x%2==0)
       result = payload.read((x-12)/2) #TODO: Correct UTF Encoding

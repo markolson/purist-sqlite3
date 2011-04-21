@@ -12,7 +12,7 @@ class Sqlite3BTree
     f = @file
     header = {
       :type => f.read(1).unpack('C')[0],
-      :offset => f.read(2).unpack('n')[0],
+      :ffree => f.read(2).unpack('n')[0],
       :cells => f.read(2).unpack('n')[0],
       :content => f.read(2).unpack('n')[0],
       :fragmented_free_bytes => f.read(1).unpack('C')[0]

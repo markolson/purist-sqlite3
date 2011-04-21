@@ -2,10 +2,10 @@ module Sqlite3Table
   class Leaf
     attr_accessor :header, :cells
     
-    def initialize(node)
+    def initialize(node, has_parent=true)
+      @has_parent = has_parent
       @f = node.file
       @pos = @f.pos
-      p "leaf table @ #{@pos}"
       @header = node.header
       @cells = node.cells
     end
@@ -13,15 +13,12 @@ module Sqlite3Table
     def rows
       _internal = []
       @cells.each {|c|
-        # I know this is wrong, but I can't be arsed to figure out what I'm doing wrong.
-        # I'M IN A HURRY DANGIT
-        if (@pos + c) > $file_header[:page_size] + 100
-          @f.pos = @pos + c
+        @f.pos = @pos
+        if @has_parent
+          @f.pos += c
         else
-          @f.pos = @pos
           @f.seek(c)
-        end 
-        p "row #{c} @ #{@f.pos}"
+        end
         record = Sqlite3Record.new(@f)
         _internal << record
       }

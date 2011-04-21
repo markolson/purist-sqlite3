@@ -30,8 +30,13 @@ module Sqlite3Table
     end
     
     def rows
-      @children.first.rows # {|c| c.rows }
-      
+      #p @children.first.rows # {|c| c.rows }
+      _r = []
+      @children.each { |c| 
+        p c
+        p "----------------"
+        _r += c.rows }
+      _r
     end
   end
 end
