@@ -8,10 +8,13 @@ require 'lib/varint.rb'
 require 'lib/schema.rb'
 
 require 'yaml'
+require 'pp'
 
 f = File.open(ARGV[0] || 'twotables.db', 'rb')
 $file_header = header = read_sqlite3_header(f)
 pages = f.stat.size / header[:page_size]
+
+
 root = Sqlite3BTree.new(f)
 $root = false
 @tables = {}
@@ -33,13 +36,11 @@ sqlite_master.rows.each{|row|
 }
 $root = true
 
-exit
-
 @tables.each { |k,v|
   next if k == 0
   p "[[[DATA FOR #{v.upcase} (#{k})]]]"
   f.rewind
-  f.pos = header[:page_size] * (k-1) #harvest?
+  f.pos = header[:page_size] * (k-1)
   old_pos = f.pos
   page = Sqlite3BTree.new(f)
   f.pos = old_pos

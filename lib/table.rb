@@ -16,6 +16,10 @@ module Sqlite3
       @t.rows
     end
     
+    def verbose_rows
+      @t.verbose_rows if @t.is_a?(Sqlite3Table::Leaf)
+    end
+    
     def inspect
       @t.inspect
     end

@@ -42,6 +42,7 @@ class Sqlite3Record
     rowid = varint(f)
     old_pos = f.pos
     header_length = varint(f) #record length is the first int
+    
     f.pos = old_pos
     header = f.read(header_length)
     # the header length includes itself. reset for now

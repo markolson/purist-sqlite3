@@ -24,5 +24,18 @@ module Sqlite3Table
       }
       return _internal
     end
+    
+    def verbose_rows
+      _rows = []
+      rows.each{|r|
+        _r = []
+        r.columns.each{|col|
+          _r << Sqlite3Record::read_column(col, r.payload)
+        }
+        _rows << _r
+      }
+      
+      _rows
+    end
   end
 end
