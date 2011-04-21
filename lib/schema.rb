@@ -7,6 +7,7 @@ module Sqlite3Table
       @pos = @f.pos
       @header = node.header
       @cells = node.cells
+      @rows = []
     end
     
     def rows
@@ -21,10 +22,33 @@ module Sqlite3Table
       #reset the pointer to the start of the content area on this page
       @f.pos = @pos
       @f.seek(@cells[row])
-      
       #read the record
-      record = Sqlite3Record.new(@f)
-      payload = record.payload
+      if @header[:type] == 5
+        page_number = @f.read(4).unpack('N')[0]
+        int_key = varint(@f)
+        page_start = @f.pos = $file_header[:page_size] * page_number
+        
+        tree = Sqlite3BTree.new(@f)
+        p tree
+        tree.cells.each{|c|
+          @f.pos = page_start
+          @f.pos += c
+          record = Sqlite3Record.new(@f)
+          record.columns.each{|col|
+            @rows << Sqlite3Record::read_column(col, record.payload)
+          }
+        }
+        p "!!!!----!!!!!"
+      else
+        p "????----?????"
+        record = Sqlite3Record.new(@f)
+        record.columns.each{|col|
+          @rows << Sqlite3Record::read_column(col, record.payload)
+        }
+      end
+      p @rows
+      #payload = record.payload
+      
       return {
         :type => Sqlite3Record::read_column(record.columns[0], payload),
         :name => Sqlite3Record::read_column(record.columns[1], payload),

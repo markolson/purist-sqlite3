@@ -37,7 +37,6 @@ class Sqlite3Record
   def initialize(f)
     payload_length = varint(f)
     rowid = varint(f)
-
     old_pos = f.pos
     header_length = varint(f) #record length is the first int
     f.pos = old_pos

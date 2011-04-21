@@ -9,15 +9,15 @@ require 'lib/varint.rb'
 require 'yaml'
 
 f = File.open(ARGV[0] || 'twotables.db', 'rb')
-header = read_sqlite3_header(f)
+$file_header = header = read_sqlite3_header(f)
 pages = f.stat.size / header[:page_size]
+p header
 
 root = Sqlite3BTree.new(f)
 @tables = {}
 sqlite_master = Sqlite3Table::Sqlite_master.new(root)
 p "sqlite_master"
 sqlite_master.rows.each{|row|
-  p row
   @tables[row[:rootpage]] = row[:name] if row[:type] == 'table'
 }
 

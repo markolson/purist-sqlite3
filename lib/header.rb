@@ -10,7 +10,7 @@ def read_sqlite3_header(f)
    :min_payload => f.read(1).unpack('C')[0],   #assert == 32
    :leaf_payload => f.read(1).unpack('C')[0],  #assert == 32
    :change_counter => f.read(4).unpack('N')[0],
-   :reserved_1 => f.read(4).unpack('C')[0],    #assert == 0
+   :page_count => f.read(4).unpack('C')[0],    #assert == 0
    :first_freelist => f.read(4).unpack('N')[0],
    :total_freelists => f.read(4).unpack('N')[0],
    :schema_cookie => f.read(4).unpack('N')[0],
@@ -20,7 +20,9 @@ def read_sqlite3_header(f)
    :text_encoding => f.read(4).unpack('N')[0],
    :user_version => f.read(4).unpack('N')[0],
    :vacuump => f.read(4).unpack('N')[0],
-   :reserved_2 => f.read(32).unpack('Z')[0]    #assert == ''
+   :reserved_2 => f.read(24).unpack('Z')[0],    #assert == ''
+   :version_valid_for => f.read(4).unpack('N')[0],
+   :sqlite_version_number => f.read(4).unpack('N')[0]
   }
   raise "Invalid Write Version #{header[:write_version]}" unless header[:write_version] == 1
   raise "Invalid Read Version" unless header[:read_version] == 1
