@@ -8,22 +8,26 @@ module Sqlite3Table
       p "inner table @ #{@pos}"
       @header = node.header
       @cells = node.cells
+      p @cells
       @children = read_children
     end
     
     def read_children
       kids = []
       @cells.each { |c|
-        @f.pos = @pos
+        next unless c
+        p "child #{c}"
+        old_pos = @f.pos = @pos
         @f.seek(c)
         page_number = @f.read(4).unpack('N')[0]
         int_key = varint(@f)
         @f.pos = page_start = $file_header[:page_size] * page_number
-        p "reading child tree @ #{c} // page: #{page_number} // int: #{int_key}"
+        p "reading child tree @ #{c}_#{@f.pos} // page: #{page_number} // int: #{int_key}"
         
         tree = Sqlite3BTree.new(@f)
         @f.pos = page_start
         t = Sqlite3::Table.new(tree)
+        p t.header
         kids << t
       }
       return kids
@@ -35,7 +39,8 @@ module Sqlite3Table
       @children.each { |c| 
         p c
         p "----------------"
-        _r += c.rows }
+        _r += c.rows 
+        }
       _r
     end
   end

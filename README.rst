@@ -1,9 +1,3 @@
-I'm interested to see if I can:
+A dumb little project to try and read sqlite3 files without having to need sqlite3 or libraries installed.
 
-* Make a 100% ruby library to read Sqlite3 databases
-* Generate classes to read the tables based on the headers
-* Query the database
-* Query it quickly
-* Handle the C, U and D in CRUD
-
-I doubt it, but, it seems like a neat thing to try.
+As of 04/21/11 it cannot handle large/complex databases.

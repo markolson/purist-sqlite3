@@ -24,5 +24,9 @@ module Sqlite3
       @t.inspect
     end
     
+    def header
+      @t.header
+    end
+    
   end
 end
