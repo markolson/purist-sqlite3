@@ -17,7 +17,9 @@ class Sqlite3BTree
       :content => f.read(2).unpack('n')[0],
       :fragmented_free_bytes => f.read(1).unpack('C')[0]
     }
-    header[:rightmost_pointer] = f.read(4).unpack('N')[0] if header[:type] < 10
+    if header[:type] < 10
+       header[:rightmost_pointer] = f.read(4).unpack('N')[0]
+     end
     header[:type_string] = @@types[header[:type]]
     return header
   end

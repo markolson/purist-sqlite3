@@ -3,8 +3,9 @@
 require 'lib/header.rb'
 require 'lib/btree.rb'
 require 'lib/record.rb'
-require 'lib/schema.rb'
+require 'lib/table.rb'
 require 'lib/varint.rb'
+require 'lib/schema.rb'
 
 require 'yaml'
 
@@ -15,12 +16,23 @@ p header
 
 root = Sqlite3BTree.new(f)
 @tables = {}
-sqlite_master = Sqlite3Table::Sqlite_master.new(root)
+#sqlite_master = Sqlite3Table::Sqlite_master.new(root)
+sqlite_master = Sqlite3::Table.new(root)
 p "sqlite_master"
 sqlite_master.rows.each{|row|
-  @tables[row[:rootpage]] = row[:name] if row[:type] == 'table'
+  r = {
+    :type => Sqlite3Record::read_column(row.columns[0], row.payload),
+    :name => Sqlite3Record::read_column(row.columns[1], row.payload),
+    :tbl_name => Sqlite3Record::read_column(row.columns[2], row.payload),
+    :rootpage => Sqlite3Record::read_column(row.columns[3], row.payload),
+    :sql => Sqlite3Record::read_column(row.columns[4], row.payload)
+  }
+  @tables[r[:rootpage]] = r[:name] if r[:type] == 'table'
 }
 
+
+
+exit
 1.upto(pages-1) {|n|
   p "Rows from #{@tables[n+1]}" if @tables[n+1]
   f.rewind
