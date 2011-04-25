@@ -10,6 +10,7 @@ class Sqlite3BTree
   
   def parse_header
     f = @file
+    old = f.pos
     header = {
       :type => f.read(1).unpack('C')[0],
       :ffree => f.read(2).unpack('n')[0],
@@ -17,8 +18,9 @@ class Sqlite3BTree
       :content => f.read(2).unpack('n')[0],
       :fragmented_free_bytes => f.read(1).unpack('C')[0]
     }
-    if header[:type] < 10
-       header[:rightmost_pointer] = f.read(4).unpack('N')[0]
+    if header[:type] == 5
+      p "reading rightmost at #{f.pos}"
+       header[:rightmost_pointer] = f.read(4).unpack('N')[0] - 2
      end
     header[:type_string] = @@types[header[:type]]
     return header

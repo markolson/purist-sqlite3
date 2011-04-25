@@ -5,7 +5,6 @@ require 'lib/btree.rb'
 require 'lib/record.rb'
 require 'lib/table.rb'
 require 'lib/varint.rb'
-require 'lib/schema.rb'
 
 require 'yaml'
 require 'pp'
@@ -13,28 +12,9 @@ require 'pp'
 f = File.open(ARGV[0] || 'twotables.db', 'rb')
 $file_header = header = read_sqlite3_header(f)
 pages = f.stat.size / header[:page_size]
-p pages
-
-def readpage(f,i)
-  f.rewind
-  f.pos = $file_header[:page_size] * (i) 
-  old_pos = f.pos
-  page = Sqlite3BTree.new(f)
-  p page
-  f.pos = old_pos
-  us = Sqlite3::Table.new(page)
-  p us
-  pp us.verbose_rows
-end
-readpage(f, 39)
-exit
-
 
 root = Sqlite3BTree.new(f)
-$root = false
 @tables = {}
-#sqlite_master = Sqlite3Table::Sqlite_master.new(root)
-#p sqlite_master
 sqlite_master = Sqlite3::Table.new(root, true)
 p "sqlite_master"
 sqlite_master.rows.each{|row|
@@ -47,9 +27,11 @@ sqlite_master.rows.each{|row|
   }
   #p r
   @tables[r[:rootpage]] = r[:name] if r[:type] == 'table'
-  #@tables[row[:rootpage]] = row[:name] if row[:type] == 'table'
 }
-$root = true
+
+p @tables
+p @tables.length
+exit
 
 @tables.each { |k,v|
   next if k == 0
