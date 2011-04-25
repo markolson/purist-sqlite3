@@ -29,7 +29,7 @@ sqlite_master.rows.each{|row|
   @tables[r[:rootpage]] = r[:name] if r[:type] == 'table'
 }
 
-p @tables
+pp @tables
 p @tables.length
 
 @tables.each { |k,v|

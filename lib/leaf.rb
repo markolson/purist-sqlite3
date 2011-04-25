@@ -6,8 +6,8 @@ module Sqlite3Table
       @has_parent = has_parent
       @f = node.file
       @pos = @f.pos
-      print "reading leaf tree at #{@pos} w/ cells "
-      p node.cells
+      #print "reading leaf tree at #{@pos} w/ cells "
+      #p node.cells
       @header = node.header
       @cells = node.cells
     end

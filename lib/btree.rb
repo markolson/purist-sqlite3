@@ -21,7 +21,7 @@ class Sqlite3BTree
       :fragmented_free_bytes => f.read(1).unpack('C')[0]
     }
     if header[:type] == 5
-      p "reading rightmost at #{f.pos}"
+      #p "reading rightmost at #{f.pos}"
        header[:rightmost_pointer] = f.read(4).unpack('N')[0] - 1
      end
     header[:type_string] = @@types[header[:type]]

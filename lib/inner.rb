@@ -10,9 +10,9 @@ module Sqlite3Table
       #@cells << @header[:rightmost_pointer].to_i
       
       
-      print "inner table @ #{@pos} /w cells  "
-      p @cells
-      p @header
+      #print "inner table @ #{@pos} /w cells  "
+      #p @cells
+      #p @header
       @children = read_children
     end
     
@@ -45,7 +45,7 @@ module Sqlite3Table
 
       _r = []
       @children.each { |c| 
-        p "getting rows for #{c}"
+        #p "getting rows for #{c}"
         _r += c.rows 
         }
       _r
