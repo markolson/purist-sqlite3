@@ -31,7 +31,6 @@ sqlite_master.rows.each{|row|
 
 p @tables
 p @tables.length
-exit
 
 @tables.each { |k,v|
   next if k == 0

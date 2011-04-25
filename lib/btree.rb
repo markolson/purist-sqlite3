@@ -4,8 +4,10 @@ class Sqlite3BTree
   
   def initialize(f)
     @file = f
+    old = @file.pos
     self.header = parse_header
     self.cells = parse_cells(self.header[:cells])
+    @file.pos = old
   end
   
   def parse_header
@@ -20,7 +22,7 @@ class Sqlite3BTree
     }
     if header[:type] == 5
       p "reading rightmost at #{f.pos}"
-       header[:rightmost_pointer] = f.read(4).unpack('N')[0] - 2
+       header[:rightmost_pointer] = f.read(4).unpack('N')[0] - 1
      end
     header[:type_string] = @@types[header[:type]]
     return header
@@ -28,10 +30,9 @@ class Sqlite3BTree
   
   # jimmy data out of the cell pointer array
   def parse_cells(count)
-    f = @file
     cells = []
     1.upto(count) do |x|
-      cells << f.read(2).unpack('n')[0]
+      cells << @file.read(2).unpack('n')[0]
     end
     return cells
   end
